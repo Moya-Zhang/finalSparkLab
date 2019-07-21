@@ -6,6 +6,7 @@ import os
 os.environ['SPARK_HOME'] = r"D:\spark-2.4.3-bin-hadoop2.7"
 os.environ['HADOOP_HOME'] = r'D:\winutil'
 
+
 def calculate(x):
     # eg:<class 'tuple'>: ('丁同', (  (('李三', '0.125'),('李文秀', '0.625')), 1.0)  )
     res = list()
@@ -15,9 +16,10 @@ def calculate(x):
         res.append(tuple((end[0], float(end[1]) * val)))
     return res
 
+
 def graphBuilder(line):
     res = list()
-    line = line.split()
+    line = line.replace("(", "").replace(")", "").replace("'", "").split(", ")
     res.append(line[0])
     res.append(list())
     line[1] = line[1].split('|')
@@ -35,13 +37,13 @@ if __name__ == "__main__":
     sc = SparkContext('local', 'pr')
 
     # 得到原始数据并进行处理
-    with open('out3.txt', 'r', encoding='utf-8') as out3:
-        lines = out3.readlines()
+    #with open('out3.txt', 'r', encoding='utf-8') as out3:
+    #    lines = out3.readlines()
 
     # 转换成key-values
     # tuple () 元组
-    pages = sc.parallelize(lines).map(graphBuilder)
-
+    #pages = sc.parallelize(lines).map(graphBuilder)
+    pages = sc.textFile("./sparkTask3/part-00000").map(graphBuilder)
     # 初始pr值都设置为1
     links = pages.map(lambda x: (x[0], 1.0))
 
@@ -58,7 +60,7 @@ if __name__ == "__main__":
         # 修正
         links = links.mapValues(lambda x: 0.15 + 0.85 * x)
 
-    links.sortBy(lambda x:x[1],False,1).saveAsTextFile("./sparkTask4")
+    links.sortBy(lambda x: x[1], False, 1).saveAsTextFile("./sparkTask4")
     # j = links.collect()
     # for i in j:
     #     print(i)

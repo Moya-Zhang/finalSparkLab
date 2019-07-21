@@ -18,10 +18,10 @@ def f(x):
 def read_file():
     graph = []
     name_list = []
-    for line in open("task3", encoding='utf-8'):
+    for line in open("./sparkTask3/part-00000", encoding='utf-8'):
         line = line[:-1]
-        name = line.split('\t')[0]
-        neighbors = line.split('\t')[1].split("|")
+        name = line.replace("(", "").replace(")", "").replace("'", "").split(", ")[0]
+        neighbors = line.replace("(", "").replace(")", "").replace("'", "").split(", ")[1].split("|")
         n_list = []
         for neighbor in neighbors:
             n_list.append((neighbor.split(",")[0], neighbor.split(",")[1]))
@@ -85,9 +85,9 @@ def update_label(args):
     return max_label
 
 
-if __name__== "__main__":
-    os.environ["SPARK_HOME"] = "C:\spark-2.4.3-bin-hadoop2.7"
-    os.environ["HADOOP_HOME"] = "C:\winutils"
+if __name__ == "__main__":
+    os.environ["SPARK_HOME"] = "D:\spark-2.4.3-bin-hadoop2.7"
+    os.environ["HADOOP_HOME"] = "D:\winutil"
 
     # 定义sparkContext
     sc = SparkContext('local')
