@@ -124,7 +124,7 @@ if __name__ == "__main__":
     #     print(i)
 
     links = links.map(lambda x: (x[1], x[0])).reduceByKey(lambda x, y: x + "," + y)
-
+    links.saveAsTextFile("./sparkTask5")
     with open("task5", 'a') as file_object:
         for i in links.collect():
-            file_object.write(i[0] + "\t" + i[1] + "\n")
+           file_object.write(i[0] + "\t" + i[1] + "\n")
