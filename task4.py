@@ -58,7 +58,7 @@ if __name__ == "__main__":
         links = rank.reduceByKey(lambda x, y: x + y)
 
         # 修正
-        links = links.mapValues(lambda x: 0.15 + 0.85 * x)
+        #links = links.mapValues(lambda x: 0.15 + 0.85 * x)
 
     links.sortBy(lambda x: x[1], False, 1).saveAsTextFile("./sparkTask4")
     # j = links.collect()
